@@ -407,8 +407,8 @@ jupyter
 **[Vysakh S Raj]**
 Data Analyst · Python · SQL · Power BI · Machine Learning
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://linkedin.com/in/yourprofile)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?logo=github)](https://github.com/yourusername)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://www.linkedin.com/in/vysakh-droid)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?logo=github)](https://github.com/vysakh01-droid/salifort_motors-EDA-and-ML)
 
 ---
 
