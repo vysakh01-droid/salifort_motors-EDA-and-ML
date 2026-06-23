@@ -336,22 +336,9 @@ print(classification_report(y_test, y_pred_rf))
 
 ## 📊 Power BI Dashboard
 
-<p align="center">
-  <img src="dashboard.png" alt="Full Salifort Motors Power BI Dashboard" width="100%"/>
-</p>
+Interactive dashboard for HR self-service. Filter by Department, Tenure, Salary, Projects, Promotion to flag high-risk employees instantly.
 
-### Dashboard features
-- **Filter panel** — Department, Salary, Tenure, Number of Projects, Promotion (last 5 yrs), Overtime
-- **KPI cards** — Avg Tenure (3.36), Total Attrition (2K), Active Employees (10K), Total Employees (12K), Attrition Rate (16.60%)
-- **Attrition % by Overtime** — pie chart (54.7% No Overtime vs 45.3% Overtime among leavers)
-- **Attrition % by number of projects, last evaluation, and avg monthly hours** — bar breakdowns
-- **Attrition Rate % by salary** — confirms Low salary band has highest attrition
-- **Attrition Rate % by tenure and department** — cross-functional view
-- **Department promotion table** — count of promotions, project load, and average tenure per department
-
-> The dashboard lets HR self-serve: filter to "3–4 year tenure + High Hours + No Promotion" and instantly see the highest-risk employee segment — operationalising the SQL and ML findings into a tool non-technical stakeholders can use daily.
-
----
+> Built the dashboard from SQL + ML insights so non-technical HR can use it daily
 
 ## 💡 Final Recommendations for HR
 
