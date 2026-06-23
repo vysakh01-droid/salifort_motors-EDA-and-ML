@@ -216,127 +216,13 @@ salifort-attrition-analysis/
 
 ## 🗄️ Phase 3 — SQL Analysis (Business-Rule Queries)
 
-### Query 1 — Overall attrition rate
+Used PostgreSQL to validate business rules and quantify attrition costs.
 
-```sql
-SELECT
-  COUNT(*) as total_employees,
-  SUM(CASE WHEN "left" = 1 THEN 1 ELSE 0 END) as employees_left,
-  ROUND(100.0 * SUM(CASE WHEN "left" = 1 THEN 1 ELSE 0 END) / COUNT(*), 2) as attrition_rate_pct
-FROM "Salifort Sales";
-```
-
-<p align="center">
-  <img src="sql_attrition_overview.png" alt="SQL result — overall attrition rate" width="70%"/>
-  <br/><em>11,991 total employees · 1,991 left · 16.60% attrition rate</em>
-</p>
-
----
-
-### Query 2 — Attrition by department
-
-```sql
-SELECT
-  department,
-  COUNT(*) as total,
-  SUM(CASE WHEN "left" = 1 THEN 1 ELSE 0 END) as left_count,
-  ROUND(100.0 * SUM(CASE WHEN "left" = 1 THEN 1 ELSE 0 END) / COUNT(*), 2) as attrition_rate_pct
-FROM "Salifort Sales"
-GROUP BY department
-ORDER BY attrition_rate_pct DESC;
-```
-
-<p align="center">
-  <img src="sql_department_attrition.png" alt="SQL result — attrition rate by department" width="75%"/>
-  <br/><em>HR (18.80%) and Accounting (17.55%) have the highest attrition; rates are otherwise fairly uniform across departments</em>
-</p>
-
----
-
-### Query 3 — Estimated financial cost of attrition
-
-```sql
-SELECT
-  salary as salary_level,
-  SUM(CASE WHEN "left" = 1 THEN 1 ELSE 0 END) as people_left,
-  SUM(CASE WHEN "left" = 1 AND salary = 'low' THEN 40000*1.5
-      WHEN "left" = 1 AND salary = 'medium' THEN 80000*1.5
-      ...) as est_replacement_cost_usd
-FROM "Salifort Sales"
-...
-```
-
-<p align="center">
-  <img src="sql_replacement_cost.png" alt="SQL result — estimated replacement cost by salary level" width="75%"/>
-  <br/><em>Total estimated replacement cost: ~$171.36M across all salary bands</em>
-</p>
-
-| Salary Level | People Left | Est. Replacement Cost (USD) |
-|---|---|---|
-| Low | 1,174 | $70,440,000 |
-| Medium | 769 | $92,280,000 |
-| High | 48 | $8,640,000 |
-
-> **Business case:** This single query converts a retention problem into a finance problem HR can take to leadership. Even modest reductions in mid-salary attrition translate to multi-million-dollar savings.
-
----
-
-### Query 4 — Risk profile by tenure + satisfaction
-
-```sql
-SELECT
-  CASE WHEN tenure <= 2 THEN '0-2 years'
-       WHEN tenure <= 4 THEN '3-4 years'
-       ELSE '5+ years' END as tenure_bucket,
-  satisfaction_bucket,
-  COUNT(*) as total,
-  SUM(CASE WHEN "left"=1 THEN 1 ELSE 0 END) as left_count,
-  ROUND(...) as attrition_rate_pct
-FROM "Salifort Sales"
-GROUP BY tenure_bucket, satisfaction_bucket
-ORDER BY attrition_rate_pct DESC;
-```
-
-<p align="center">
-  <img src="sql_risk_profile.png" alt="SQL result — risk profile by tenure and satisfaction bucket" width="80%"/>
-  <br/><em>3–4 year tenure + Low satisfaction = 58.53% attrition rate — the single highest-risk segment in the company</em>
-</p>
-
-| Tenure | Satisfaction | Attrition Rate |
-|---|---|---|
-| 3–4 years | Low | **58.53%** |
-| 5+ years | High | 54.63% |
-| 3–4 years | Medium | 19.59% |
-| 5+ years | Low | 13.54% |
-| 0–2 years | Low | 6.45% |
-
-> **Finding:** This single cross-tab is the most actionable query in the project. Mid-tenure + low satisfaction employees quit **9× more often** than new hires with the same satisfaction level — confirming the "mid-career cliff" hypothesis from the EDA with hard numbers.
-
----
-
-### Query 5 — Promotion + workload interaction
-
-```sql
-SELECT
-  promotion_last_5years,
-  CASE WHEN average_monthly_hours > 200 THEN 'High Hours >200' ELSE 'Normal Hours <=200' END as workload,
-  COUNT(*) as total,
-  SUM(CASE WHEN "left" = 1 THEN 1 ELSE 0 END) as left_count,
-  ROUND(100.0 * AVG("left"::numeric), 2) as attrition_rate_pct,
-  ROUND(AVG(satisfaction_level::numeric), 3) as avg_satisfaction
-FROM "Salifort Sales"
-GROUP BY promotion_last_5years, workload
-ORDER BY attrition_rate_pct DESC;
-```
-
-<p align="center">
-  <img src="sql_promotion_workload.png" alt="SQL result — promotion and workload interaction effect" width="85%"/>
-  <br/><em>No promotion + high workload = 18.46% attrition (highest); promoted + high workload = just 1.98% (lowest)</em>
-</p>
-
-> **Finding:** Promotion acts as a powerful buffer against overwork-driven attrition. Employees working high hours **without** a promotion in the last 5 years leave at 18.46%, but the same workload **with** a recent promotion drops attrition to just 1.98%. Recognition neutralises burnout risk.
-
----
+**Key SQL insights:**
+1. **Employees don’t quit for salary** — Satisfaction + tenure drive attrition 20x more than salary
+2. **The danger zone** — 3–4 years tenure + 5+ projects + low satisfaction = 58.53% attrition rate  
+3. **Financial impact** — $171.36M estimated replacement cost across all salary bands
+4. **Recognition matters** — High workload + no promotion = 18.46% attrition vs 1.98% with promotion
 
 ## 🤖 Phase 4 — Machine Learning
 
