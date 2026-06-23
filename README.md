@@ -72,6 +72,7 @@ salifort-attrition-analysis/
 | Columns | 10 |
 | Duplicate rows found | 3,008 (20% of data) |
 | Missing values | 0 |
+| Source | Google Advanced Data Analytics Professional Certificate - Capstone Project |
 
 | Column | Description |
 |---|---|
