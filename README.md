@@ -1,7 +1,7 @@
 # 🧑‍💼 Salifort Motors — Employee Attrition Analysis
 
 <p align="center">
-  <img src="dashboard1/dashboard.png" alt="Salifort Motors Attrition Dashboard" width="100%"/>
+  <img src="dashboard1.png" alt="Salifort Motors Attrition Dashboard" width="100%"/>
 </p>
 
 <p align="center">
